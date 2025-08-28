@@ -1,0 +1,14 @@
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\bin\Debug\net9.0\rock_paper_scissors.exe
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\bin\Debug\net9.0\rock_paper_scissors.deps.json
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\bin\Debug\net9.0\rock_paper_scissors.runtimeconfig.json
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\bin\Debug\net9.0\rock_paper_scissors.dll
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\bin\Debug\net9.0\rock_paper_scissors.pdb
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.AssemblyInfoInputs.cache
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.AssemblyInfo.cs
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.csproj.CoreCompileInputs.cache
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.dll
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\refint\rock_paper_scissors.dll
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.pdb
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.genruntimeconfig.cache
+C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\ref\rock_paper_scissors.dll
