@@ -1,145 +1,166 @@
 ﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 internal class Program
 {
-
   static int PlayerWins = 0;
   static int ComputerWins = 0;
+  static int MatchesPlayed = 0;
+
+  static readonly Dictionary<string, string?> beats = new()  {
+      { "rock", "scissors" },
+      { "paper", "rock" },
+      { "scissors", "paper" },
+      { "dynamite", null },
+  };
+
+  static Dictionary<string, int> PlayerChoiceCounts = new()  {
+      { "rock", 0 },
+      { "paper", 0 },
+      { "scissors", 0 },
+      { "dynamite", 0 },
+  };
+
+  static readonly List<string> hands = ["rock", "paper", "scissors", "dynamite"];
+
   private static void Main()
   {
+    LoadGame();
+
     Console.WriteLine("Rock, Paper, Scissors");
 
     string userHand = ChooseHand();
     string computerHand = GetComputerHand();
 
+    bool? playerWon = null;
+
     Console.WriteLine($"You chose {userHand}");
     Console.WriteLine($"Computer chose {computerHand}");
 
-    if (userHand == computerHand)
+    if (beats[userHand] == null)
     {
-      Console.WriteLine("TIE");
+      playerWon = true;
+      PlayerChoiceCounts["dynamite"]++;
     }
-    else if (userHand == "rock")
+    else if (beats[computerHand] == null) playerWon = false;
+    else if (userHand == "scissors")
     {
-      if (computerHand == "scissors")
-      {
-        Console.WriteLine("You WIN");
-        PlayerWins++;
-
-      }
-      else
-      {
-        Console.WriteLine("Computer WIN");
-        ComputerWins++;
-      }
+      playerWon = computerHand == beats[userHand];
+      PlayerChoiceCounts["scissors"]++;
     }
     else if (userHand == "paper")
     {
-      if (computerHand == "rock")
-      {
-        Console.WriteLine("You WIN");
-        PlayerWins++;
-
-      }
-      else
-      {
-        Console.WriteLine("Computer WIN");
-        ComputerWins++;
-
-      }
+      playerWon = computerHand == beats[userHand];
+      PlayerChoiceCounts["paper"]++;
     }
-    else if (userHand == "scissors")
+    else if (userHand == "rock")
     {
-      if (computerHand == "paper")
-      {
-        Console.WriteLine("You WIN");
-        PlayerWins++;
-
-      }
-      else
-      {
-        Console.WriteLine("Computer WIN");
-        ComputerWins++;
-
-      }
+      playerWon = computerHand == beats[userHand];
+      PlayerChoiceCounts["rock"]++;
     }
 
+    if (playerWon == null)
+    {
+      Console.WriteLine("TIE");
+    }
+    else if ((bool)playerWon)
+    {
+      Console.WriteLine("You WIN");
+      PlayerWins++;
+    }
+    else
+    {
+      Console.WriteLine("Computer WIN");
+      ComputerWins++;
+    }
+
+    MatchesPlayed++;
+    SaveGame();
     playAgain();
   }
 
   static string ChooseHand()
   {
-    string userInput;
-    string output;
+    int selectedIndex = 0;
+    string? output = hands[selectedIndex];
+    ConsoleKey key;
+    List<string> choices = [
+      "1/r. Rock",
+      "2/p. Paper",
+      "3/s. Scissors",
+      "4/d. Dynamite"
+    ];
 
     do
     {
+      Console.Clear();
+
       Console.WriteLine("Choose a Hand");
-      Console.WriteLine("1/r. Rock");
-      Console.WriteLine("2/p. Paper");
-      Console.WriteLine("3/s. Scissors");
+      Console.WriteLine("");
 
-      userInput = Console.ReadLine();
-
-      switch (userInput)
+      for (int i = 0; i < choices.Count; i++)
       {
-        case "1" or "r":
-          output = "rock";
-          break;
-        case "2" or "p":
-          output = "paper";
-          break;
-        case "3" or "s":
-          output = "scissors";
-          break;
-        default:
-          output = "";
-          break;
+        if (i == selectedIndex)
+        {
+          Console.ForegroundColor = ConsoleColor.Green;
+        }
+
+        Console.WriteLine(choices[i]);
+        Console.ResetColor();
       }
+
+      Console.WriteLine("");
+      Console.WriteLine("Type SYMBOL or use ARROW KEYS to select and ENTER: ");
+
+      key = Console.ReadKey(true).Key;
+
+      if (key is ConsoleKey.Enter) output = hands[selectedIndex];
+      else if (key is ConsoleKey.UpArrow && selectedIndex != 0) selectedIndex--;
+      else if (key is ConsoleKey.DownArrow && selectedIndex != hands.Count - 1) selectedIndex++;
+      else if (key is ConsoleKey.D1 or ConsoleKey.R) selectedIndex = 0;
+      else if (key is ConsoleKey.D2 or ConsoleKey.P) selectedIndex = 1;
+      else if (key is ConsoleKey.D3 or ConsoleKey.S) selectedIndex = 2;
+      else if (key is ConsoleKey.D4 or ConsoleKey.D) selectedIndex = 3;
     }
-    while (!(userInput is "1" or "2" or "3" or "r" or "p" or "s"));
+    while (key != ConsoleKey.Enter);
 
     return output;
   }
 
   static string GetComputerHand()
   {
-    string output;
-    int randomNum = new Random().Next(1, 4);
+    string maxChoice = PlayerChoiceCounts.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+    Console.WriteLine(PlayerChoiceCounts[maxChoice]);
 
-    switch (randomNum)
+    var matchingKeys = PlayerChoiceCounts.Where(kvp => kvp.Value == PlayerChoiceCounts[maxChoice])
+      .Select(kvp => kvp.Key)
+      .ToList();
+
+    Random rand = new();
+    string randomHand = hands[rand.Next(0, hands.Count)];
+
+    if (matchingKeys.Count == 2)
     {
-      case 1:
-        output = "rock";
-        break;
-      case 2:
-        output = "paper";
-        break;
-      case 3:
-        output = "scissors";
-        break;
-      case 4:
-        output = "well";
-        break;
-      case 5:
-        output = "scissors";
-        break;
-      default:
-        output = "";
-        break;
+      return matchingKeys[rand.Next(0, 1)];
     }
+    else if (matchingKeys.Count == 3) return randomHand;
 
-    return output;
+    return rand.NextDouble() < 0.5 ? beats[maxChoice] : randomHand;
+    // returning value of dynamite breaks it
   }
 
   static void playAgain()
   {
-    string userInput;
+    string? userInput;
 
     do
     {
-      Console.WriteLine("Play again? (y/n)");
+      Console.WriteLine($"\nYou have played {MatchesPlayed} matches\n");
+      Console.WriteLine($"You have won {PlayerWins} matches. ({Math.Round((double)PlayerWins / MatchesPlayed * 100, 2)}%)\n");
+      Console.WriteLine($"Computer has won {ComputerWins} matches. ({Math.Round((double)ComputerWins / MatchesPlayed * 100, 2)}%)\n");
+
+      Console.Write("Play again? (y/n) ");
 
       userInput = Console.ReadLine();
 
@@ -161,7 +182,7 @@ internal class Program
 
   static void SaveGame()
   {
-    SaveData save = new(PlayerWins, ComputerWins);
+    SaveData save = new(PlayerWins, ComputerWins, MatchesPlayed);
     string saveData = JsonSerializer.Serialize(save);
     File.WriteAllText("saveGame.json", saveData);
   }
@@ -176,18 +197,22 @@ internal class Program
     {
       PlayerWins = data.PlayerWins;
       ComputerWins = data.ComputerWins;
+      MatchesPlayed = data.MatchesPlayed;
     }
   }
 
 }
+
 internal class SaveData
 {
   public int PlayerWins { get; set; }
   public int ComputerWins { get; set; }
+  public int MatchesPlayed { get; set; }
 
-  public SaveData(int playerWins, int computerWins)
+  public SaveData(int playerWins, int computerWins, int matchesPlayed)
   {
     PlayerWins = playerWins;
     ComputerWins = computerWins;
+    MatchesPlayed = matchesPlayed;
   }
 }

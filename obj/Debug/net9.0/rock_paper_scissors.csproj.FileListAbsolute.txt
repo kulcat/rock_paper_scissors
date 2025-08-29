@@ -12,3 +12,4 @@ C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0
 C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.pdb
 C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.genruntimeconfig.cache
 C:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\ref\rock_paper_scissors.dll
+c:\Users\CodeWorks Student\source\codeworks\rock_paper_scissors\obj\Debug\net9.0\rock_paper_scissors.sourcelink.json
